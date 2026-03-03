@@ -64,6 +64,7 @@ function draw_slider(column, min, max, scatter_svg, bar_svg, scatter_scale, bar_
 // TODO: Write a function that draws the scatterplot
 function draw_scatter(data, svg, scale){
 
+    console.log("from inside draw_scatter");
     console.log("scale is: " + scale);
     
     // draw dots
@@ -115,6 +116,7 @@ function update(scatter_svg, bar_svg, scatter_scale, bar_scale){
             'content-type': 'application/json'
         })
     }).then(async function(response){
+        console.log("in update after response (function update script.js)")
         var results = JSON.parse(JSON.stringify((await response.json())))
         update_scatter(results['scatter_data'], scatter_svg, scatter_scale)
         update_bar(results['bar_data'], results['max_count'], bar_svg, bar_scale)

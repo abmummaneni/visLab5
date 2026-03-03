@@ -47,7 +47,7 @@ def update():
     bar_results['month'] = bar_results.index.map({i: sorted_months[i] for i in range(len(sorted_months))})
     bar_data = [] # TODO: Extract the data that will populate the bar chart from the results
     max_count = 0 # TODO: Extract the maximum number of forest fires in a single month from the results
-
+    
     return {'scatter_data': scatter_data, 'bar_data': bar_data, 'max_count': max_count}
 
 if __name__ == "__main__":

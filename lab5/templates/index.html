@@ -36,7 +36,6 @@
 
   scatter_svg = draw_svg('scatter', margin, width, height)
   scatter_scale = draw_axes('scatter', scatter_svg, width, height, {{scatter_ranges[:2]}}, {{scatter_ranges[2:]}}, false)
-  // draw_scatter({{scatter_data}}, scatter_svg, scatter_scale)
   bar_svg = draw_svg('bar', margin, width, height)
   bar_scale = draw_axes('bar', bar_svg, width, height, {{months|safe}}, [0, {{max_count}}], true)
 
