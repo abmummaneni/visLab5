@@ -116,8 +116,9 @@ function update(scatter_svg, bar_svg, scatter_scale, bar_scale){
             'content-type': 'application/json'
         })
     }).then(async function(response){
-        console.log("in update after response (function update script.js)")
+        console.log("in update before results (function update script.js)")
         var results = JSON.parse(JSON.stringify((await response.json())))
+        console.log("in update after results (function update script.js)")
         update_scatter(results['scatter_data'], scatter_svg, scatter_scale)
         update_bar(results['bar_data'], results['max_count'], bar_svg, bar_scale)
     })
