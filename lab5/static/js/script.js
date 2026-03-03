@@ -64,6 +64,18 @@ function draw_slider(column, min, max, scatter_svg, bar_svg, scatter_scale, bar_
 // TODO: Write a function that draws the scatterplot
 function draw_scatter(data, svg, scale){
 
+    console.log("scale is: " + scale);
+    
+    // draw dots
+    // svg.selectAll(".dot")
+    //     .data(data)
+    //     .join("circle")
+    //     .attr("class", "dot")
+    //     .attr("cx", d => data[])
+    //     .attr("cy", d => data[])
+    //     .attr("r", 3)
+    //     .attr("fill", "red")
+    //     .attr("opacity", 0.3)
 }
 
 // TODO: write a function that updates the bar

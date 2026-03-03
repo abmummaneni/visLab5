@@ -12,15 +12,19 @@ sorted_months = sorted(months)
 def index():
     scatter_ranges_query = f'SELECT MIN(X), MAX(X), MIN(Y), MAX(Y) FROM forestfires.csv' # Retrieves the minimum and maximum X and Y coordinates
     scatter_ranges_results = duckdb.sql(scatter_ranges_query).df()
-    scatter_ranges = [0, 0, 0, 0] # TODO: Define a list [minimum of X, maximum of X, minimum of Y, maximum of Y]
-    
-    max_count_query = 'SELECT * FROM forestfires.csv' # TODO: Write a query that retrieves the maximum number of forest fires that occurred in a single month
+    scatter_ranges = scatter_ranges_results.iloc[0].tolist() 
+    max_count_query = 'SELECT MAX(count) FROM (SELECT COUNT(*) as count FROM forestfires.csv GROUP BY month)' 
     max_count_results = duckdb.sql(max_count_query).df()
-    max_count = 0 # TODO: Extract the maximum count from the query results
-
-    filter_ranges_query = 'SELECT * FROM forestfires.csv' # TODO: write a query that retrieves the the minimum and maximum value for each slider
-    filter_ranges_results = duckdb.sql(filter_ranges_query).df()
-    filter_ranges = {} # TODO: Create a dictionary where each key is a filter and values are the minimum and maximum values
+    max_count = max_count_results.iloc[0]['max(count)']
+    filter_ranges_query = 'SELECT MAX(temp), MIN(temp), MAX(humidity), MIN(humidity), MAX(wind), MIN(wind) FROM forestfires.csv' # TODO: write a query that retrieves the the minimum and maximum value for each slider
+    filter_ranges_results = duckdb.sql(filter_ranges_query).df().iloc[0].tolist()
+  
+    filter_ranges = {
+        "temp" : [filter_ranges_results[1], filter_ranges_results[0]],
+        "humidity" : [filter_ranges_results[3], filter_ranges_results[2]],
+        "wind": [filter_ranges_results[5], filter_ranges_results[4]]
+    } 
+    # print(filter_ranges)
 
     return render_template(
         'index.html', months=months, days=days,
@@ -47,5 +51,5 @@ def update():
     return {'scatter_data': scatter_data, 'bar_data': bar_data, 'max_count': max_count}
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, port=8000)
     
