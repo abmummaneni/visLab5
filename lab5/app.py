@@ -41,7 +41,10 @@ def update():
     # print("cont pred: ")
     # print(continuous_predicate)
     days = request_data['day']
-    
+
+    if not days:
+        return {'scatter_data': [], 'bar_data': [], 'max_count': 0}
+
     discrete_predicate = ' AND '.join([f"{column} IN {tuple(days)}" for column in discrete_columns]) # TODO: update where clause from checkboxes
     # print("discrete pred")
     # print(discrete_predicate)
@@ -71,6 +74,8 @@ def update():
 
     bar_data = bar_results['count'].tolist() # Extract the data that will populate the bar chart from the results
     max_count = max(bar_results["count"]) #  Extract the maximum number of forest fires in a single month from the results
+    print("max count: ")
+    print(max_count)
     # print({'scatter_data': scatter_data, 'bar_data': bar_data, 'max_count': max_count})
 
     return {'scatter_data': scatter_data, 'bar_data': bar_data, 'max_count': max_count}

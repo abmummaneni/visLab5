@@ -63,7 +63,6 @@ function draw_slider(column, min, max, scatter_svg, bar_svg, scatter_scale, bar_
 
 // TODO: Write a function that draws the scatterplot
 function draw_scatter(data, svg, scale){
-
     console.log("from inside draw_scatter");
     console.log("scale is: ");
     console.log(scale);
@@ -87,6 +86,7 @@ function draw_scatter(data, svg, scale){
 function draw_bar(data, svg, scale){
     scaleX = scale['x']
     scaleY = scale['y']
+    
     months_list = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
     console.log(data)
     svg.selectAll(".bar")
@@ -123,13 +123,18 @@ function get_params(){
 
 // TODO: Write a function that removes the old data points and redraws the scatterplot
 function update_scatter(data, svg, scale){
-
+    // remove old points
+    svg.selectAll(".dot").remove();
     draw_scatter(data, svg, scale)
 }
 
 // TODO: Write a function that updates the y-axis, removes the old bars, and redraws the bars
 function update_bar(data, max_count, svg, scale){
+    // remove old y-axis and bar:
+    svg.selectAll(".bar, .bar-yaxis").remove();
+    months_list = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 
+    scale = draw_axes("bar", svg, width, height, months_list, [0, max_count], true)
     draw_bar(data, svg, scale)
 }
 
