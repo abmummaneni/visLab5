@@ -61,7 +61,13 @@ def update():
     # Construct query for bar plot
     bar_query = f'SELECT month, COUNT(*) as count FROM forestfires.csv WHERE {predicate} GROUP BY month' # TODO: Write a query that retrieves the number of forest fires per month after filtering
     bar_results = duckdb.sql(bar_query).df()
-    bar_results['month'] = pd.to_datetime(bar_results['month']).dt.month
+    
+    # Map month names to month numbers
+    month_map = {
+        'jan': 1, 'feb': 2, 'mar': 3, 'apr': 4, 'may': 5, 'jun': 6,
+        'jul': 7, 'aug': 8, 'sep': 9, 'oct': 10, 'nov': 11, 'dec': 12
+    }
+    bar_results['month'] = bar_results['month'].str.lower().map(month_map)
 
     # Format bar_results so that it contains each month even if it is zero
     bar_results = bar_results.sort_values(by='month')
