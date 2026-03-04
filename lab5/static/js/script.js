@@ -65,31 +65,59 @@ function draw_slider(column, min, max, scatter_svg, bar_svg, scatter_scale, bar_
 function draw_scatter(data, svg, scale){
 
     console.log("from inside draw_scatter");
-    console.log("scale is: " + scale);
+    console.log("scale is: ");
+    console.log(scale);
+
+    scaleX = scale['x']
+    scaleY = scale['y']
     
     // draw dots
-    // svg.selectAll(".dot")
-    //     .data(data)
-    //     .join("circle")
-    //     .attr("class", "dot")
-    //     .attr("cx", d => data[])
-    //     .attr("cy", d => data[])
-    //     .attr("r", 3)
-    //     .attr("fill", "red")
-    //     .attr("opacity", 0.3)
+    svg.selectAll(".dot")
+        .data(data)
+        .join("circle")
+        .attr("class", "dot")
+        .attr("cx", d => scaleX(d[0]))
+        .attr("cy", d => scaleY(d[1]))
+        .attr("r", 3)
+        .attr("fill", "red")
+        .attr("opacity", 0.8)
 }
 
 // TODO: write a function that updates the bar
 function draw_bar(data, svg, scale){
-
+    scaleX = scale['x']
+    scaleY = scale['y']
+    months_list = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+    console.log(data)
+    svg.selectAll(".bar")
+        .data(data)
+        .join("rect")
+        .attr("class", "bar")
+        .attr("x", (d, i) => scaleX(months_list[i]))
+        .attr("y", (d) => scaleY(d))
+        .attr("width", scaleX.bandwidth())
+        .attr("height", (d) => height - scaleY(d)) // height from value to bottom
+        .attr("fill", "steelblue")
 }
 
 // TODO: Write a function that extracts the selected days and minimum/maximum values for each slider
 function get_params(){
     var day = []
-    var humidity = [0, 0]
-    var temp = [0, 0]
-    var wind = [0, 0]
+
+    d3.selectAll(".day-selected").each(function() {
+        var attributeValue = d3.select(this).attr("value");
+        day.push(attributeValue);
+    });
+
+    var wind_slider = document.getElementById('wind-slider');
+    var temp_slider = document.getElementById('temp-slider');
+    var humidity_slider = document.getElementById('humidity-slider');
+
+    var humidity = humidity_slider.noUiSlider.get()
+    var temp = temp_slider.noUiSlider.get()
+    var wind = wind_slider.noUiSlider.get()
+    console.log("in get params:")
+    console.log({'day': day, 'humidity': humidity, 'temp': temp, 'wind': wind})
     return {'day': day, 'humidity': humidity, 'temp': temp, 'wind': wind}
 }
 
