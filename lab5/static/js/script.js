@@ -61,12 +61,9 @@ function draw_slider(column, min, max, scatter_svg, bar_svg, scatter_scale, bar_
     });
 }
 
-// TODO: Write a function that draws the scatterplot
+// Function that draws the scatterplot
 function draw_scatter(data, svg, scale){
-    console.log("from inside draw_scatter");
-    console.log("scale is: ");
-    console.log(scale);
-
+    // get scale functions
     scaleX = scale['x']
     scaleY = scale['y']
     
@@ -82,7 +79,7 @@ function draw_scatter(data, svg, scale){
         .attr("opacity", 0.8)
 }
 
-// TODO: write a function that updates the bar
+// Function that updates the bar
 function draw_bar(data, svg, scale){
     scaleX = scale['x']
     scaleY = scale['y']
@@ -100,40 +97,41 @@ function draw_bar(data, svg, scale){
         .attr("fill", "steelblue")
 }
 
-// TODO: Write a function that extracts the selected days and minimum/maximum values for each slider
+// Function that extracts the selected days and minimum/maximum values for each slider
 function get_params(){
+    // collect selected days
     var day = []
-
     d3.selectAll(".day-selected").each(function() {
         var attributeValue = d3.select(this).attr("value");
         day.push(attributeValue);
     });
-
+    
+    // get min and max values from sliders
     var wind_slider = document.getElementById('wind-slider');
     var temp_slider = document.getElementById('temp-slider');
     var humidity_slider = document.getElementById('humidity-slider');
-
     var humidity = humidity_slider.noUiSlider.get()
     var temp = temp_slider.noUiSlider.get()
     var wind = wind_slider.noUiSlider.get()
-    console.log("in get params:")
-    console.log({'day': day, 'humidity': humidity, 'temp': temp, 'wind': wind})
+
     return {'day': day, 'humidity': humidity, 'temp': temp, 'wind': wind}
 }
 
-// TODO: Write a function that removes the old data points and redraws the scatterplot
+// Function that removes the old data points and redraws the scatterplot
 function update_scatter(data, svg, scale){
     // remove old points
     svg.selectAll(".dot").remove();
+    // draw new points
     draw_scatter(data, svg, scale)
 }
 
-// TODO: Write a function that updates the y-axis, removes the old bars, and redraws the bars
+// Function that updates the y-axis, removes the old bars, and redraws the bars
 function update_bar(data, max_count, svg, scale){
     // remove old y-axis and bar:
     svg.selectAll(".bar, .bar-yaxis").remove();
     months_list = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 
+    // redraw bars with new scale
     scale = draw_axes("bar", svg, width, height, months_list, [0, max_count], true)
     draw_bar(data, svg, scale)
 }
@@ -149,9 +147,7 @@ function update(scatter_svg, bar_svg, scatter_scale, bar_scale){
             'content-type': 'application/json'
         })
     }).then(async function(response){
-        console.log("in update before results (function update script.js)")
         var results = JSON.parse(JSON.stringify((await response.json())))
-        console.log("in update after results (function update script.js)")
         update_scatter(results['scatter_data'], scatter_svg, scatter_scale)
         update_bar(results['bar_data'], results['max_count'], bar_svg, bar_scale)
     })
